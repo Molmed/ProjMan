@@ -109,13 +109,15 @@ sub readStats{
 	    print STDERR join("\t", $fcId, $lane->{Id}, $read->{Id}, "\n");#, $read->{DensityRaw}, $read->{DensityPF},
 #		       $read->{ErrRate}, $read->{Raw}, $read->{PF}, $read->{Cycles}, $read->{PctQ30},
 #		       $read->{AvgQ}), "\n";
-	    $dbh->do(qq( INSERT INTO flowcell_lane_results(flowcell_id, lane_num, read_num, raw_density, pf_density,\
+        eval {
+            $dbh->do(qq( INSERT INTO flowcell_lane_results(flowcell_id, lane_num, read_num, raw_density, pf_density,\
                            error_rate, raw_clusters, pf_clusters, cycles, pct_q30, mean_q)\
                          VALUES('$fcId', $lane->{Id}, $read->{Id}, $read->{DensityRaw}, $read->{DensityPF},\
 		               $read->{ErrRate}, $read->{Raw}, $read->{PF}, $read->{Cycles}, $read->{PctQ30},\
 	                       $read->{AvgQ})
                          )
-		    );
+            );
+        };
 	}
     }
     foreach my $sample (@{$stats->{SampleMetrics}->{Sample}}){
